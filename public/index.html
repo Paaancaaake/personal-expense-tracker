@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0A0A0F">
+  <meta name="description" content="A calm, accessible personal finance dashboard to track income, expenses, and monthly budgets.">
+  <title>Ledger — Personal Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <div id="auth-view" class="auth-layout">
+    <main class="auth-panel" aria-labelledby="auth-title">
+      <a class="brand" href="/" aria-label="Ledger home">
+        <span class="brand-mark" aria-hidden="true">L</span>
+        <span>ledger<span class="brand-period">.</span></span>
+      </a>
+      <div class="auth-copy">
+        <span class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Your money, in focus</span>
+        <h1 id="auth-title">Make room for<br><span>better decisions.</span></h1>
+        <p class="auth-description">A calmer way to understand your spending, keep your budget on track, and make every rupee count.</p>
+      </div>
+      <section class="auth-card glass-card" aria-label="Account access">
+        <div class="auth-tabs" role="tablist" aria-label="Account options">
+          <button class="auth-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="auth-form" data-auth-mode="login">Sign in</button>
+          <button class="auth-tab" type="button" role="tab" aria-selected="false" aria-controls="auth-form" data-auth-mode="register">Create account</button>
+        </div>
+        <form id="auth-form" novalidate>
+          <div id="register-name-field" class="field hidden">
+            <label for="auth-name">Your name <span class="required-mark">(required)</span></label>
+            <input id="auth-name" name="name" autocomplete="name" maxlength="100" placeholder="e.g. Sathvik Reddy" aria-describedby="auth-name-error">
+            <small id="auth-name-error" class="field-error"></small>
+          </div>
+          <div class="field">
+            <label for="auth-email">Email address <span class="required-mark">(required)</span></label>
+            <input id="auth-email" name="email" type="email" autocomplete="email" maxlength="190" required placeholder="you@example.com" aria-describedby="auth-email-hint auth-email-error">
+            <small id="auth-email-hint" class="field-hint">Use an email you can remember.</small>
+            <small id="auth-email-error" class="field-error"></small>
+          </div>
+          <div class="field">
+            <label for="auth-password">Password <span class="required-mark">(required)</span></label>
+            <input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="72" required placeholder="At least 8 characters" aria-describedby="auth-password-hint auth-password-error">
+            <small id="auth-password-hint" class="field-hint">Use at least 8 characters.</small>
+            <small id="auth-password-error" class="field-error"></small>
+          </div>
+          <p id="auth-message" class="form-message" role="alert" aria-live="polite"></p>
+          <button id="auth-submit" class="button button-primary button-wide" type="submit">Sign in <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="privacy-note"><span aria-hidden="true">◆</span> Your transactions are private to your account.</p>
+      </section>
+      <p class="auth-footer">Built for clarity, not complexity.</p>
+    </main>
+    <aside class="auth-aside" aria-label="Ledger highlights">
+      <div class="aside-topline"><span class="mono-label">PERSONAL FINANCE / 01</span><span class="live-label"><span class="status-dot" aria-hidden="true"></span> A clearer picture</span></div>
+      <div class="aside-visual" aria-hidden="true">
+        <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
+        <div class="visual-core"><span class="visual-core-mark">L</span></div>
+        <span class="orbit-label label-one">Spend intentionally</span>
+        <span class="orbit-label label-two">Save consistently</span>
+        <span class="orbit-label label-three">See the whole picture</span>
+      </div>
+      <div class="aside-bottom">
+        <p class="quote-mark" aria-hidden="true">“</p>
+        <blockquote>Small insights today.<br><span>More confident choices tomorrow.</span></blockquote>
+        <div class="aside-rule"></div>
+        <p class="aside-caption">A personal finance workspace that gives your money the attention it deserves.</p>
+      </div>
+    </aside>
+  </div>
+
+  <div id="app-view" class="app-shell hidden">
+    <aside id="sidebar" class="sidebar">
+      <a class="brand sidebar-brand" href="#overview" aria-label="Ledger overview">
+        <span class="brand-mark" aria-hidden="true">L</span><span>ledger<span class="brand-period">.</span></span>
+      </a>
+      <p class="nav-label">WORKSPACE</p>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-link is-current" href="#overview" data-page="overview"><span class="nav-icon" aria-hidden="true">◫</span> Overview</a>
+        <a class="nav-link" href="#transactions" data-page="transactions"><span class="nav-icon" aria-hidden="true">⇄</span> Transactions</a>
+        <a class="nav-link" href="#budget" data-page="budget"><span class="nav-icon" aria-hidden="true">◎</span> Budgets</a>
+        <a class="nav-link" href="#analytics" data-page="analytics"><span class="nav-icon" aria-hidden="true">▥</span> Analytics & reports</a>
+        <a class="nav-link" href="#goals" data-page="goals"><span class="nav-icon" aria-hidden="true">◇</span> Savings goals</a>
+        <a class="nav-link" href="#recurring" data-page="recurring"><span class="nav-icon" aria-hidden="true">⟳</span> Recurring</a>
+        <a class="nav-link" href="#calendar" data-page="calendar"><span class="nav-icon" aria-hidden="true">▦</span> Calendar</a>
+        <a class="nav-link" href="#groups" data-page="groups"><span class="nav-icon" aria-hidden="true">♧</span> Group splits</a>
+        <a class="nav-link" href="#settings" data-page="settings"><span class="nav-icon" aria-hidden="true">⚙</span> Settings</a>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-tip">
+        <span class="tip-icon" aria-hidden="true">✳</span>
+        <p class="tip-title">A little goes a long way.</p>
+        <p class="tip-copy">Consistent tracking makes patterns easier to see.</p>
+      </div>
+      <div class="profile-row">
+        <div id="user-avatar" class="avatar" aria-hidden="true">U</div>
+        <div class="profile-copy"><strong id="sidebar-user-name">Your account</strong><span id="sidebar-user-email">Signed in</span></div>
+      </div>
+    </aside>
+
+    <div class="main-column">
+      <header class="topbar">
+        <button id="mobile-menu-button" class="icon-button mobile-menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar"><span aria-hidden="true">☰</span></button>
+        <div class="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong id="breadcrumb-current">Overview</strong></div>
+        <div class="topbar-actions">
+          <input id="global-month" class="month-picker" type="month" aria-label="Choose month to view" hidden>
+          <button id="logout-button" class="icon-button topbar-logout-button" type="button" aria-label="Sign out" title="Sign out"><span aria-hidden="true">↗</span></button>
+        </div>
+      </header>
+
+      <main id="main-content" class="page-content" tabindex="-1">
+        <section id="overview-page" class="page-section" aria-labelledby="page-title">
+          <div class="page-heading">
+            <div><p class="eyebrow">YOUR FINANCIAL SNAPSHOT</p><h1 id="page-title">Good to see you, <span id="greeting-name">there</span>.</h1><p class="page-subtitle">Here’s what your money has been up to this month.</p></div>
+            <button id="overview-add-button" class="button button-primary" type="button">＋ Add transaction</button>
+          </div>
+
+          <div class="summary-grid" aria-label="Monthly financial summary">
+            <article class="summary-card glass-card">
+              <div class="summary-top"><span class="summary-label">Total balance</span><span class="summary-icon balance-icon" aria-hidden="true">◈</span></div>
+              <p id="balance-value" class="summary-value">₹0.00</p><p class="summary-foot">Income minus expenses</p>
+            </article>
+            <article class="summary-card glass-card">
+              <div class="summary-top"><span class="summary-label">Income</span><span class="summary-icon income-icon" aria-hidden="true">↗</span></div>
+              <p id="income-value" class="summary-value">₹0.00</p><p class="summary-foot">Money received this month</p>
+            </article>
+            <article class="summary-card glass-card">
+              <div class="summary-top"><span class="summary-label">Expenses</span><span class="summary-icon expense-icon" aria-hidden="true">↘</span></div>
+              <p id="expenses-value" class="summary-value">₹0.00</p><p id="expense-count" class="summary-foot">No transactions yet</p>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel glass-card" aria-labelledby="spending-title">
+              <div class="panel-heading"><div><h2 id="spending-title">Spending breakdown</h2><p class="panel-subtitle">Where your money went</p></div><span id="breakdown-month" class="mini-badge">This month</span></div>
+              <div id="category-chart" class="category-chart" role="img" aria-label="Expense category breakdown will appear here when you add expenses."><div class="empty-chart"><span aria-hidden="true">◌</span><p>No expenses to break down yet.</p><span>Add an expense to see your spending by category.</span></div></div>
+              <ul id="category-legend" class="category-legend" aria-label="Expense totals by category"></ul>
+            </section>
+            <section class="panel glass-card" aria-labelledby="trend-title">
+              <div class="panel-heading"><div><h2 id="trend-title">Cash flow</h2><p class="panel-subtitle">Income vs expenses over 6 months</p></div><span class="chart-key"><span class="key-dot income-key"></span> Income <span class="key-dot expense-key"></span> Expenses</span></div>
+              <div id="trend-chart" class="trend-chart" role="img" aria-label="Monthly income and expenses chart will appear when transactions are recorded."><div class="empty-chart"><span aria-hidden="true">⌁</span><p>Your cash flow starts here.</p><span>Add transactions to build your history.</span></div></div>
+            </section>
+          </div>
+
+          <section class="panel glass-card recent-panel" aria-labelledby="recent-title">
+            <div class="panel-heading"><div><h2 id="recent-title">Recent transactions</h2><p class="panel-subtitle">Your latest money movements</p></div><a class="text-link" href="#transactions" data-page="transactions">View all transactions <span aria-hidden="true">→</span></a></div>
+            <div class="table-wrap"><table class="data-table"><caption class="sr-only">Five most recent transactions</caption><thead><tr><th scope="col">Transaction</th><th scope="col">Category</th><th scope="col">Date</th><th scope="col" class="align-right">Amount</th></tr></thead><tbody id="recent-table-body"><tr><td colspan="4" class="table-empty">Your transactions will appear here after you add one.</td></tr></tbody></table></div>
+          </section>
+        </section>
+
+        <section id="transactions-page" class="page-section hidden" aria-labelledby="transactions-title">
+          <div class="page-heading"><div><p class="eyebrow">YOUR ACTIVITY</p><h1 id="transactions-title">Transactions</h1><p class="page-subtitle">Every inflow and outflow, all in one place.</p></div><button class="button button-primary" type="button" data-open-transaction>＋ Add transaction</button></div>
+          <section class="panel glass-card" aria-label="Transaction filters">
+            <div class="filter-bar">
+              <div class="field filter-search"><label for="transaction-search">Search transactions</label><input id="transaction-search" type="search" placeholder="Search description or category" autocomplete="off"></div>
+              <div class="field filter-type"><label for="transaction-type-filter">Transaction type</label><select id="transaction-type-filter"><option value="">All types</option><option value="income">Income</option><option value="expense">Expense</option></select></div>
+              <div class="field"><label for="transaction-start-date">From date</label><input id="transaction-start-date" type="date"></div>
+              <div class="field"><label for="transaction-end-date">To date</label><input id="transaction-end-date" type="date"></div>
+              <div class="field"><label for="transaction-sort">Sort by</label><select id="transaction-sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="highest">Highest amount</option><option value="lowest">Lowest amount</option></select></div>
+              <button id="clear-filters" class="button button-secondary filter-clear" type="button">Clear filters</button>
+              <button id="export-button" class="button button-secondary filter-export" type="button">↓ Export CSV</button>
+            </div>
+            <p id="transaction-result-count" class="result-count" aria-live="polite">Showing transactions</p>
+            <div class="table-wrap"><table class="data-table"><caption class="sr-only">All matching transactions</caption><thead><tr><th scope="col">Transaction</th><th scope="col">Category</th><th scope="col">Date</th><th scope="col" class="align-right">Amount</th><th scope="col" class="actions-heading">Actions</th></tr></thead><tbody id="transactions-table-body"><tr><td colspan="5" class="table-empty">Loading transactions…</td></tr></tbody></table></div>
+          </section>
+        </section>
+
+        <section id="budget-page" class="page-section hidden" aria-labelledby="budget-title">
+          <div class="page-heading"><div><p class="eyebrow">SPEND WITH INTENTION</p><h1 id="budget-title">Monthly budget</h1><p class="page-subtitle">Give your spending a plan, without making it complicated.</p></div></div>
+          <div class="budget-layout">
+            <section class="panel glass-card budget-main" aria-labelledby="budget-progress-title">
+              <div class="panel-heading"><div><h2 id="budget-progress-title">Your monthly limit</h2><p id="budget-month-label" class="panel-subtitle">Budget progress for this month</p></div><span class="summary-icon balance-icon" aria-hidden="true">◎</span></div>
+              <p id="budget-spent-value" class="budget-spent">₹0.00</p><p id="budget-of-label" class="budget-of-label">of ₹0.00 budgeted</p>
+              <div id="budget-progress-track" class="progress-track" role="progressbar" aria-label="Monthly budget used" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="budget-progress-fill" class="progress-fill"></span></div>
+              <div class="budget-progress-meta"><span id="budget-percent-label">Set a budget to begin tracking.</span><span id="budget-remaining-label">₹0.00 remaining</span></div>
+              <div id="budget-status-message" class="budget-status" role="status">Your budget will appear here after you set a monthly limit.</div>
+            </section>
+            <section class="panel glass-card budget-form-panel" aria-labelledby="set-budget-title">
+              <h2 id="set-budget-title">Set your budget</h2><p class="panel-subtitle">Choose a monthly spending limit. You can update it anytime.</p>
+              <form id="budget-form" novalidate>
+                <div class="field"><label for="budget-month">Budget month <span class="required-mark">(required)</span></label><input id="budget-month" name="month" type="month" required aria-describedby="budget-month-error"><small id="budget-month-error" class="field-error"></small></div>
+                <div class="field"><label for="budget-amount">Monthly limit (₹) <span class="required-mark">(required)</span></label><input id="budget-amount" name="amount" type="number" min="0" max="999999999" step="0.01" required placeholder="e.g. 15000.00" aria-describedby="budget-amount-hint budget-amount-error"><small id="budget-amount-hint" class="field-hint">Enter 0 if you do not want a spending limit.</small><small id="budget-amount-error" class="field-error"></small></div>
+                <p id="budget-message" class="form-message" role="alert" aria-live="polite"></p>
+                <button class="button button-primary button-wide" type="submit">Save monthly budget</button>
+              </form>
+            </section>
+          </div>
+          <section class="panel glass-card feature-panel" aria-labelledby="category-budget-title">
+            <div class="panel-heading"><div><h2 id="category-budget-title">Category budgets</h2><p class="panel-subtitle">Set a separate limit for categories like food, travel or shopping.</p></div></div>
+            <form id="category-budget-form" class="inline-form"><div class="field"><label for="category-budget-category">Category</label><select id="category-budget-category" required></select></div><div class="field"><label for="category-budget-amount">Monthly limit (₹)</label><input id="category-budget-amount" type="number" min="1" step="0.01" required placeholder="e.g. 3000"></div><button class="button button-primary" type="submit">Save category limit</button></form>
+            <div id="category-budgets-list" class="feature-list"><p class="muted-copy">Your category budgets will appear here.</p></div>
+          </section>
+          <section class="panel glass-card budget-note"><span class="tip-icon" aria-hidden="true">✳</span><div><h2>A helpful way to use a budget</h2><p>Start with what you can realistically spend. Review your transactions every few days, then adjust the next month based on what you learn.</p></div></section>
+        </section>
+
+        <section id="analytics-page" class="page-section hidden" aria-labelledby="analytics-title">
+          <div class="page-heading"><div><p class="eyebrow">UNDERSTAND YOUR PATTERNS</p><h1 id="analytics-title">Analytics & reports</h1><p class="page-subtitle">Explore spending trends, category patterns and actionable insights.</p></div><div class="heading-actions"><button id="report-print-button" class="button button-secondary" type="button">Print monthly summary</button><button id="report-export-button" class="button button-secondary" type="button">↓ Export report CSV</button></div></div>
+          <div class="summary-grid"><article class="summary-card glass-card"><div class="summary-top"><span class="summary-label">Income in selected month</span><span class="summary-icon income-icon">↗</span></div><p id="analytics-income" class="summary-value">₹0.00</p><p class="summary-foot">Based on your saved transactions</p></article><article class="summary-card glass-card"><div class="summary-top"><span class="summary-label">Expenses in selected month</span><span class="summary-icon expense-icon">↘</span></div><p id="analytics-expenses" class="summary-value">₹0.00</p><p class="summary-foot">Total recorded spending</p></article><article class="summary-card glass-card"><div class="summary-top"><span class="summary-label">Savings rate</span><span class="summary-icon balance-icon">％</span></div><p id="analytics-savings-rate" class="summary-value">0%</p><p class="summary-foot">Income remaining after expenses</p></article></div>
+          <section class="panel glass-card feature-panel"><div class="panel-heading"><div><h2>Financial insights</h2><p class="panel-subtitle">Observations based on your actual Ledger data.</p></div></div><div id="insights-list" class="insights-grid"><p class="muted-copy">Add transactions to generate insights.</p></div></section>
+          <section class="panel glass-card feature-panel"><div class="panel-heading"><div><h2>Category report</h2><p class="panel-subtitle">Your largest expense categories for the selected month.</p></div></div><div id="analytics-categories" class="feature-list"></div></section>
+          <section class="panel glass-card feature-panel"><div class="panel-heading"><div><h2>Payment method breakdown</h2><p class="panel-subtitle">See how you paid for purchases.</p></div></div><div id="payment-breakdown" class="feature-list"></div></section>
+        </section>
+
+        <section id="goals-page" class="page-section hidden" aria-labelledby="goals-title">
+          <div class="page-heading"><div><p class="eyebrow">SAVE WITH PURPOSE</p><h1 id="goals-title">Savings goals</h1><p class="page-subtitle">Turn bigger plans into small, trackable milestones.</p></div></div>
+          <section class="panel glass-card feature-panel"><h2>Create a savings goal</h2><form id="goal-form" class="inline-form"><div class="field"><label for="goal-name">Goal name</label><input id="goal-name" required maxlength="100" placeholder="e.g. New laptop"></div><div class="field"><label for="goal-target">Target amount (₹)</label><input id="goal-target" type="number" min="1" step="0.01" required placeholder="50000"></div><div class="field"><label for="goal-saved">Already saved (₹)</label><input id="goal-saved" type="number" min="0" step="0.01" value="0"></div><div class="field"><label for="goal-date">Target date (optional)</label><input id="goal-date" type="date"></div><button class="button button-primary" type="submit">Create goal</button></form></section>
+          <div id="goals-list" class="feature-card-grid"><p class="muted-copy">No goals yet. Create your first goal above.</p></div>
+        </section>
+
+        <section id="recurring-page" class="page-section hidden" aria-labelledby="recurring-title">
+          <div class="page-heading"><div><p class="eyebrow">AUTOMATE YOUR ROUTINE</p><h1 id="recurring-title">Recurring transactions</h1><p class="page-subtitle">Keep track of subscriptions, bills, salary and other repeat transactions.</p></div></div>
+          <section class="panel glass-card feature-panel"><h2>Add a recurring transaction</h2><form id="recurring-form" class="inline-form"><div class="field"><label for="recurring-type">Type</label><select id="recurring-type"><option value="expense">Expense</option><option value="income">Income</option></select></div><div class="field"><label for="recurring-description">Description</label><input id="recurring-description" required maxlength="180" placeholder="e.g. Internet bill"></div><div class="field"><label for="recurring-amount">Amount (₹)</label><input id="recurring-amount" type="number" min="0.01" step="0.01" required placeholder="999"></div><div class="field"><label for="recurring-category">Category</label><select id="recurring-category" required></select></div><div class="field"><label for="recurring-payment">Payment method</label><select id="recurring-payment"><option>UPI</option><option>Cash</option><option>Debit card</option><option>Credit card</option><option>Bank transfer</option><option>Other</option></select></div><div class="field"><label for="recurring-frequency">Frequency</label><select id="recurring-frequency"><option value="weekly">Weekly</option><option value="monthly" selected>Monthly</option><option value="yearly">Yearly</option></select></div><div class="field"><label for="recurring-date">Next due date</label><input id="recurring-date" type="date" required></div><button class="button button-primary" type="submit">Save recurring item</button></form></section>
+          <section class="panel glass-card feature-panel"><div class="panel-heading"><div><h2>Your recurring items</h2><p class="panel-subtitle">Generate a transaction when an item is due. Ledger advances its next due date.</p></div></div><div id="recurring-list" class="feature-list"><p class="muted-copy">No recurring items yet.</p></div></section>
+        </section>
+
+        <section id="calendar-page" class="page-section hidden" aria-labelledby="calendar-title">
+          <div class="page-heading"><div><p class="eyebrow">YOUR MONEY, BY DATE</p><h1 id="calendar-title">Transaction calendar</h1><p class="page-subtitle">Review income and expenses on the days they happened.</p></div><div class="calendar-controls"><button id="calendar-prev" class="button button-secondary" type="button" aria-label="Previous month">←</button><strong id="calendar-month-label">Month</strong><button id="calendar-next" class="button button-secondary" type="button" aria-label="Next month">→</button></div></div>
+          <section class="panel glass-card feature-panel"><div id="calendar-grid" class="calendar-grid"></div></section><section class="panel glass-card feature-panel"><h2 id="calendar-day-title">Select a date</h2><div id="calendar-day-transactions" class="feature-list"><p class="muted-copy">Choose a day to see transactions.</p></div></section>
+        </section>
+
+        <section id="groups-page" class="page-section hidden" aria-labelledby="groups-title">
+          <div class="page-heading"><div><p class="eyebrow">SHARE THE COST, NOT THE CONFUSION</p><h1 id="groups-title">Group expense splitting</h1><p class="page-subtitle">Create an event with Ledger members, record shared expenses and calculate who reimburses whom.</p></div></div>
+          <section class="panel glass-card feature-panel"><h2>Create an event</h2><form id="group-form" class="inline-form"><div class="field"><label for="group-name">Event name</label><input id="group-name" required maxlength="120" placeholder="e.g. Goa weekend"></div><div class="field"><label for="group-description">Description (optional)</label><input id="group-description" maxlength="255" placeholder="Trip, dinner, shared flat…"></div><div class="field"><label for="group-emails">Participants' Ledger emails</label><input id="group-emails" placeholder="alex@example.com, sam@example.com"><small class="field-hint">Only existing Ledger accounts can be added. Separate emails with commas.</small></div><button class="button button-primary" type="submit">Create event</button></form></section>
+          <div class="groups-layout"><section class="panel glass-card feature-panel"><div class="panel-heading"><div><h2>Your events</h2><p class="panel-subtitle">Events you're a member of.</p></div></div><div id="groups-list" class="feature-list"><p class="muted-copy">No events yet.</p></div></section><section class="panel glass-card feature-panel"><div id="group-detail"><div class="empty-state"><h2>Select an event</h2><p>Choose an event to see members, shared expenses and reimbursement transactions.</p></div></div></section></div>
+        </section>
+
+        <section id="settings-page" class="page-section hidden" aria-labelledby="settings-title">
+          <div class="page-heading"><div><p class="eyebrow">MAKE LEDGER YOURS</p><h1 id="settings-title">Settings</h1><p class="page-subtitle">Manage your profile and appearance preferences.</p></div></div>
+          <section class="panel glass-card settings-panel"><h2>Profile</h2><form id="profile-form"><div class="field"><label for="profile-name">Display name</label><input id="profile-name" required maxlength="100"></div><div class="field"><label for="profile-email">Email address</label><input id="profile-email" disabled></div><p id="profile-message" class="form-message" role="status"></p><button class="button button-primary" type="submit">Save profile</button></form></section>
+          <section class="panel glass-card settings-panel"><h2>Appearance</h2><p class="panel-subtitle">Choose the look that feels right for you.</p><div class="settings-row"><div><strong>Light theme</strong><p class="muted-copy">Switch between Ledger's dark and light surfaces.</p></div><button id="theme-toggle" class="button button-secondary" type="button">Enable light theme</button></div></section>
+          <section class="panel glass-card settings-panel"><h2>Data & reports</h2><p class="panel-subtitle">Download your personal transactions as a CSV file.</p><button id="settings-export-button" class="button button-secondary" type="button">↓ Export all transactions</button></section>
+        </section>
+      </main>
+      <footer class="app-footer"><span>Ledger <span class="brand-period">.</span> Personal finance, made clearer.</span><span>Keep it simple. Keep it intentional.</span></footer>
+    </div>
+  </div>
+
+  <dialog id="transaction-dialog" class="transaction-dialog" aria-labelledby="transaction-dialog-title">
+    <div class="dialog-header"><div><p class="eyebrow">TRANSACTION DETAILS</p><h2 id="transaction-dialog-title">Add transaction</h2><p class="dialog-subtitle">A small record today makes tomorrow clearer.</p></div><button id="close-transaction-dialog" class="icon-button" type="button" aria-label="Close transaction form">×</button></div>
+    <form id="transaction-form" novalidate>
+      <input id="transaction-id" name="id" type="hidden">
+      <fieldset class="type-fieldset"><legend>Transaction type <span class="required-mark">(required)</span></legend><div class="type-options"><label class="type-option"><input type="radio" name="type" value="expense" checked><span class="type-option-content"><span aria-hidden="true">↘</span> Expense</span></label><label class="type-option"><input type="radio" name="type" value="income"><span class="type-option-content"><span aria-hidden="true">↗</span> Income</span></label></div><small id="transaction-type-error" class="field-error"></small></fieldset>
+      <div class="field"><label for="transaction-amount">Amount (₹) <span class="required-mark">(required)</span></label><input id="transaction-amount" name="amount" type="number" min="0.01" max="999999999" step="0.01" required placeholder="0.00" aria-describedby="transaction-amount-hint transaction-amount-error"><small id="transaction-amount-hint" class="field-hint">Enter the amount in Indian rupees.</small><small id="transaction-amount-error" class="field-error"></small></div>
+      <div class="form-two-col">
+        <div class="field"><label for="transaction-category">Category <span class="required-mark">(required)</span></label><select id="transaction-category" name="category" required aria-describedby="transaction-category-error"><option value="">Choose category</option></select><small id="transaction-category-error" class="field-error"></small></div>
+        <div class="field"><label for="transaction-date">Date <span class="required-mark">(required)</span></label><input id="transaction-date" name="transaction_date" type="date" required aria-describedby="transaction-date-error"><small id="transaction-date-error" class="field-error"></small></div>
+      </div>
+      <div class="field"><label for="transaction-description">Description <span class="required-mark">(required)</span></label><input id="transaction-description" name="description" type="text" maxlength="180" required placeholder="e.g. Lunch with friends" aria-describedby="transaction-description-hint transaction-description-error"><small id="transaction-description-hint" class="field-hint">Keep it short and easy to recognize later.</small><small id="transaction-description-error" class="field-error"></small></div>
+      <div class="field"><label for="transaction-payment">Payment method</label><select id="transaction-payment" name="payment_method"><option>UPI</option><option>Cash</option><option>Debit card</option><option>Credit card</option><option>Bank transfer</option><option>Other</option></select></div>
+      <p id="transaction-form-message" class="form-message" role="alert" aria-live="polite"></p>
+      <div class="dialog-actions"><button id="cancel-transaction" class="button button-secondary" type="button">Cancel</button><button id="save-transaction" class="button button-primary" type="submit">Save transaction</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-title">
+    <div class="dialog-header"><div><p class="eyebrow">PLEASE CONFIRM</p><h2 id="confirm-title">Delete transaction?</h2><p id="confirm-description" class="dialog-subtitle">This action cannot be undone.</p></div></div>
+    <div class="dialog-actions"><button id="cancel-delete" class="button button-secondary" type="button">Keep transaction</button><button id="confirm-delete" class="button button-danger" type="button">Delete transaction</button></div>
+  </dialog>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
